@@ -1,0 +1,124 @@
+<div class="content" role="main">
+
+  <div class="card border border-primary rounded flex-grow-1 h-auto text-dark flex-column m-4 px-3 py-3">
+
+    <p>
+      The basement bargain spread hunter is a tool that finds deep out-of-the-money put spreads that are at the best prices!
+    </p>
+    <br />
+
+    <h4>
+      Screened Tickers...
+    </h4>
+
+    <table class="table table-bordered border-primary" bordered="true">
+
+      <thead class="thead-dark">
+        <tr>
+          <th scope="col" class="text-center text-wrap">Large Caps</th>
+          <th scope="col" class="text-center text-wrap">ETFs</th>
+          <th scope="col" class="text-center text-wrap">High V's</th>
+          <th scope="col" class="text-center text-wrap">Meme Stonks</th>
+          <th scope="col" class="text-center text-wrap">Best In Class</th>
+        </tr>
+      </thead>
+      <tbody class="text-center">
+        <ng-container *ngIf="rowsInTickerTable > 0">
+          <ng-container *ngFor="let rowIndex of arrayOfRowIndicies">
+            <tr scope="row">
+              
+              <ng-container *ngIf="largecapTickers.length > rowIndex">
+                <td>{{largecapTickers[rowIndex]}}</td>
+              </ng-container>
+
+              <ng-container *ngIf="etfTickers.length > rowIndex">
+                <td>{{etfTickers[rowIndex]}}</td>
+              </ng-container>
+
+              <ng-container *ngIf="memeStonkTickers.length > rowIndex">
+                <td>{{memeStonkTickers[rowIndex]}}</td>
+              </ng-container>
+
+              <ng-container *ngIf="bestInClassTickers.length > rowIndex">
+                <td>{{bestInClassTickers[rowIndex]}}</td>
+              </ng-container>
+
+            </tr>
+          </ng-container>
+        </ng-container>
+      </tbody>
+    </table>
+
+    <h4>
+      Top Put Spreads...
+    </h4>
+
+    <br />
+
+    <ng-container *ngFor="let analyzedSpread of analyzedSpreads">
+
+      <ng-container *ngIf="analyzedSpread.length > 0">
+        <h3>
+          <!-- ok... -->
+          <!-- {{strangulation[0] | json}} -->
+
+          <!-- {{analyzedSpread | json}} -->
+          {{analyzedSpread[0].ticker}} &nbsp; &nbsp; &nbsp; | 
+          &nbsp; &nbsp; &nbsp;
+            last: ${{analyzedSpread[0].underlyingPrice}}
+        </h3>
+      </ng-container>
+
+      <br />
+
+      <table class="table table-bordered border-primary" bordered="true">
+
+        <thead class="thead-dark">
+          <tr>
+            <th scope="col" class="text-center text-wrap">Higher Strike<br/>(Sell Short)</th>
+            <th scope="col" class="text-center text-wrap">Lower Strike<br/>(Buy Long)</th>
+            <th scope="col" class="text-center text-wrap">Expiration Cycle</th>
+            <th scope="col" class="text-center text-wrap">Price to Sell Higher Strike</th>
+            <th scope="col" class="text-center text-wrap">Price to Buy Lower Strike</th>
+            <th scope="col" class="text-center text-wrap">Net Theta</th>
+            <th scope="col" class="text-center text-wrap">Net Delta</th>
+            <th scope="col" class="text-center text-wrap">Net Credit To Collect</th>
+            <th scope="col" class="text-center text-wrap">Max Loss<br/>(width of strikes - credit collected)</th>
+            <th scope="col" class="text-center text-wrap">TOML score
+              <br/>theta * 10,000 <br/>/ max loss
+            </th>
+          </tr>
+        </thead>
+
+        <tbody class="text-center">
+
+          <ng-container *ngFor="let analyzedSpreadRow of analyzedSpread">
+
+            <!-- {{analyzedSpreadRow | json}} -->
+
+            <tr scope="row">
+              <td>{{analyzedSpreadRow.higherStrike}}</td>
+              <td>{{analyzedSpreadRow.lowerStrike}}</td>
+              <td>{{analyzedSpreadRow.expirationCycle}}</td>
+              <td>{{+analyzedSpreadRow.higherStrikePutBidAskMidpoint.toFixed(3)}}</td>
+              <td>{{+analyzedSpreadRow.lowerStrikePutBidAskMidpoint.toFixed(3)}}</td>
+              <td>{{analyzedSpreadRow.netTheta.toFixed(3)}}</td>
+              <td>{{+analyzedSpreadRow.netDelta.toFixed(4)}}</td>
+              <td>{{analyzedSpreadRow.netCreditForSpread.toFixed(2)}}</td>
+              <td>{{+analyzedSpreadRow.maxLoss.toFixed(2)}}</td>
+              <td>{{+analyzedSpreadRow.tomlScore.toFixed(4)}}</td>
+            </tr>
+          </ng-container>
+        </tbody>
+      </table>
+
+    </ng-container>
+
+  </div>
+
+  <br />
+  <br />
+  <br />
+  <br />
+
+</div>
