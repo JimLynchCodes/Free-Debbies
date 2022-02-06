@@ -1,0 +1,35 @@
+<table class="table table-bordered border-primary" bordered="true">
+
+    <thead class="thead-dark">
+        <tr>
+            <th scope="col" class="text-center text-wrap">Ticker</th>
+            <th scope="col" class="text-center text-wrap">Option Type</th>
+            <th scope="col" class="text-center text-wrap">Total Prem</th>
+            <th scope="col" class="text-center text-wrap">Net Debit</th>
+            <th scope="col" class="text-center text-wrap">Expiration Cycle</th>
+            <th scope="col" class="text-center text-wrap">Higher Strike</th>
+            <th scope="col" class="text-center text-wrap">Lower Strike</th>
+            <th scope="col" class="text-center text-wrap">Underlying Price</th>
+        </tr>
+    </thead>
+
+    <tbody class="text-center">
+
+        <ng-container *ngFor="let analyzedDebitSpread of analyzedDebitSpreads">
+
+            <tr scope="row">
+                <td>{{analyzedDebitSpread.symbol}}</td>
+                <td>{{analyzedDebitSpread.spreadType}}</td>
+                <td>{{analyzedDebitSpread.expirationCycle}}</td>
+                <td>{{+analyzedDebitSpread.totalPremiumSum}}</td>
+                <td>{{+analyzedDebitSpread.higherStrike}</td>
+                <td>{{analyzedDebitSpread.lowerStrike}}</td>
+                <td>{{+analyzedDebitSpread.underlyingPrice}}</td>
+                <td>{{analyzedDebitSpread.higherStrikeMidpoint}}</td>
+                <td>{{+analyzedDebitSpread.lowerStrikeMidpoint}}</td>
+                <td>{{+analyzedDebitSpread.expirationCycle}}</td>
+                <td>{{+analyzedDebitSpread.midpointDifference}}</td>
+            </tr>
+        </ng-container>
+    </tbody>
+</table>
