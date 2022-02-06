@@ -111,12 +111,18 @@ export class TradeBotPageComponent {
   // largecapTickers = ['TSM', 'TSLA', 'BABA', 'WMT', 'DIS', 'BAC', 'NVDA', 'PYPL', 'INTC', 'NFLX']
   largecapTickers = []
   // etfTickers = ['IWM', 'QQQ', 'EEM', 'EWZ', 'IWM', 'XLF', 'SQQQ', 'SLV', 'GDX', 'XLE']
-  etfTickers = ['SPY', 'QQQ', 'SOXL']
-  memeStonkTickers = ['GME', 'AMC', 'MVIS', 'VIAC', 'RKT', 'AMD', 'MSFT', 'PLTR', 'TLRY', 'NIO', 'UBER', 'APHA', 'EBAY', 'MDB', 'NFLX', 'TSLA', 'NVDA', 'DIS', 'SNAP', 'COST', 'SBUX', 'UNH', 'CVS', 'UPS', 'SHW']
+  // etfTickers = ['SPY', 'QQQ', 'SOXL']
+  etfTickers = []
   // memeStonkTickers = ['GME', 'AMC', 'MVIS', 'VIAC', 'RKT', 'AMD', 'MSFT', 'PLTR', 'TLRY', 'NIO', 'UBER', 'APHA', 'EBAY', 'MDB']
-  solidProfitMakersTickers = ['MELI', 'APPL', 'AMZN', 'FB', 'COST', 'EW', 'BAND', 'SPOT', 'MAXR', 'LW', 'HD', 'MARA', 'BITO']
+  // solidProfitMakersTickers = ['MELI', 'APPL', 'AMZN', 'FB', 'COST', 'EW', 'BAND', 'SPOT', 'MAXR', 'LW', 'HD', 'MARA', 'BITO']
+  solidProfitMakersTickers = []
+  // memeStonkTickers = ['GME', 'AMC', 'MVIS', 'VIAC', 'RKT', 'AMD', 'MSFT', 'PLTR', 'TLRY', 'NIO', 'UBER', 'APHA', 'EBAY', 'MDB', 'NFLX', 'TSLA', 'NVDA', 'DIS', 'SNAP', 'COST', 'SBUX', 'UNH', 'CVS', 'UPS', 'SHW']
   // memeStonkTickers = ['GME', 'MDB']
-  bestInClassTickers = ['GOOG', 'GOOGL', 'APPL', 'AMZN', 'FB', 'COST']
+  // memeStonkTickers = ['COF', 'SNAP']
+  // memeStonkTickers = ['AMZN', 'GOOGL', 'TSLA', 'LYFT', 'SAVE']
+  memeStonkTickers = ['AMZN', 'GOOGL', 'TSLA', 'HOG', 'PFE', 'PTON', 'TWLO', 'APPS', 'CRSR', 'CHGG', 'SPX', 'IWM', 'SMH', 'DDOG', 'NET', 'MGM', 'GLBE', 'CMG', 'SEB', 'BKNG']
+  // bestInClassTickers = ['GOOG', 'GOOGL', 'APPL', 'AMZN', 'FB', 'COST']
+  bestInClassTickers = []
 
   rowsInTickerTable = 0
   arrayOfRowIndicies = []
@@ -125,6 +131,7 @@ export class TradeBotPageComponent {
 
   // strangulations = [];
   analyzedSpreads = [];
+  analyzedDebitSpreads = [];
 
   constructor(private http: HttpClient,
     private tdApiSvc: TdApiService,
@@ -136,6 +143,21 @@ export class TradeBotPageComponent {
   gotTdData = false
 
   async ngOnInit() {
+
+    setTimeout(() => {
+
+      console.log('ok....')
+
+      this.analyzedDebitSpreads = this.analyzedDebitSpreads.sort((a, b) => {
+        console.log('#$# OR' + a.totalPremiumSum)
+
+        return a.totalPremiumSum > b.totalPremiumSum ? -1 : 1
+      })
+
+      console.log('#$# sorted ', this.analyzedDebitSpreads)
+
+      console.log('#$# pushed ',  this.analyzedDebitSpreads)
+    }, 20_000)
 
     this.allSymbols = [
       ...this.largecapTickers,
@@ -155,11 +177,24 @@ export class TradeBotPageComponent {
 
     if (!this.accountsData) {
 
-      this.accountsData = await this.tdApiSvc.getPositions();
+      // this.accountsData = await this.tdApiSvc.getPositions();
+
+      console.log('#$# looping over tickers: ', this.allSymbols)
+
+      this.analyzedDebitSpreads = []
 
       this.allSymbols.forEach(async symbol => {
 
-        const optionChain: any = await this.tdApiSvc.getOptionChainForSymbol(symbol);
+        console.log('#$# calling for chain: ', symbol);
+
+        let optionChain: any
+
+        try {
+          optionChain = await this.tdApiSvc.getOptionChainForSymbol(symbol);
+        }
+        catch (err) {
+          console.log('#$# couldn\'t get options chains for: ', symbol)
+        }
 
         // const minAcceptableDelta = -0.002
         // const maxAcceptableDelta = 0.002
@@ -171,7 +206,15 @@ export class TradeBotPageComponent {
 
         if (optionChain['underlying']) {
 
+          console.log('#$# analyzing spreads for ', symbol, optionChain.putExpDateMap, optionChain.underlying)
+
           const spreadsForTicker = this.strangulator.analyzePutSpreads(symbol, optionChain.putExpDateMap, optionChain.underlying)
+
+          const callSpreads = this.strangulator.getPennyCallSpreads(symbol, optionChain.callExpDateMap, optionChain.underlying)
+          const putSpreads = this.strangulator.getPennyPutSpreads(symbol, optionChain.putExpDateMap, optionChain.underlying)
+
+          console.log('#$# call spreads ------')
+          console.log('#$#', callSpreads)
 
           // const strangulation = this.strangulator.strangulate(
           //   optionChain['callExpDateMap'],
@@ -183,7 +226,11 @@ export class TradeBotPageComponent {
           //   maxAcceptableGamma
           // )
 
-          this.analyzedSpreads.push(spreadsForTicker);
+          this.analyzedDebitSpreads.push(...callSpreads)
+          this.analyzedDebitSpreads.push(...putSpreads)
+
+          // this.analyzedSpreads.push(spreadsForTicker);
+         
 
           // this.strangulations = this.strangulations.filter(strangulation => {
           //   return strangulation.length > 0
@@ -195,14 +242,17 @@ export class TradeBotPageComponent {
 
           // console.log('the gud ones are..... ', this.strangulations);
 
-          this.analyzedSpreads = this.analyzedSpreads.sort((a, b) => {
 
-            console.log('comparing toml score ' + a[0].tomlScore + ' to ' + b[0].tomlScore)
 
-            return a[0].tomlScore > b[0].tomlScore ? -1 : 1
-          })
         }
+
       })
+
+
+
+
+
+
     }
   }
 }

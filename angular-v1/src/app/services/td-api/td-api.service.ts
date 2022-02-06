@@ -770,7 +770,7 @@ export class TdApiService {
 
         this.refreshOrders();
 
-        resolve()
+        resolve(null);
       })
     })
 
@@ -785,13 +785,13 @@ export class TdApiService {
 
     console.log(`getting option chain for ${symbol}! `)
 
-    const queryParams = `?symbol=${symbol}&contractType=ALL&strikeCount=20&includeQuotes=TRUE&strategy=SINGLE&range=ALL`
+    const queryParams = `?symbol=${symbol}&contractType=ALL&strikeCount=80&includeQuotes=TRUE&strategy=SINGLE&range=ALL`
 
     const getOptionChainEndpoint = 'https://api.tdameritrade.com/v1/marketdata/chains'
 
     return new Promise(resolve => {
       this.http.get(getOptionChainEndpoint + queryParams, { headers: getOptionChainHeaders }).subscribe((response: any) => {
-        // console.log(`got option chain for ${symbol}! `, response)
+        console.log(`#$# got option chain for ${symbol}! `, response)
         resolve(response)
       })
     })

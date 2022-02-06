@@ -5,6 +5,189 @@ import { Injectable } from '@angular/core';
 })
 export class StrangulatorService {
 
+  getPennyCallSpreads(symbol: any, callExpDateMap: any, underlyingData: any) {
+
+    console.log('getting penny call spreads for: ', symbol, callExpDateMap);
+
+    const gudOnes = [];
+
+    // loop through expiration tables
+    Object.entries(callExpDateMap).forEach(([expirationString, calls]) => {
+
+      console.log('now looking at: ' + symbol + 'expirationString: ', expirationString);
+
+      // loop through strikes for a given expiration
+      const strikes = Object.keys(calls)
+
+      for (var i = 0; i < strikes.length; i++) {
+
+        const strike = strikes[i];
+
+        // console.log(ticker + ' strike: ', strike);
+        // console.log(ticker + ' put: ', puts[strike]);
+
+        if (strikes[i + 1]) {
+
+          const lowerStrike = calls[strikes[i]][0].strikePrice;
+          const higherStrike = calls[strikes[i + 1]][0].strikePrice;
+
+          console.log('#$# comparing strike ' + lowerStrike + ' to next higher: ' + higherStrike)
+
+          const lowerStrikeBid = calls[strikes[i]][0].bid
+          const lowerStrikeAsk = calls[strikes[i]][0].ask;
+          const lowerStrikeMidpoint = (lowerStrikeAsk + lowerStrikeBid) / 2;
+
+          console.log('#$# (strike ' + calls[strikes[i]][0].strikePrice + '), bid: ' + lowerStrikeBid + ', ask: ' + lowerStrikeAsk, ', mid: ', lowerStrikeMidpoint)
+
+          const higherStrikeBid = calls[strikes[i + 1]][0].bid
+          const higherStrikeAsk = calls[strikes[i + 1]][0].ask;
+          const higherStrikeMidpoint = (higherStrikeAsk + higherStrikeBid) / 2;
+
+          console.log('#$# (strike ' + calls[strikes[i + 1]][0].strikePrice + '), bid: ' + higherStrikeBid + ', ask: ' + higherStrikeAsk, ', mid: ', higherStrikeMidpoint)
+
+          const midpointDifference = lowerStrikeMidpoint - higherStrikeMidpoint;
+
+          console.log('#$# debit difference: ', midpointDifference);
+
+          // if (midpointDifference < 0.05 && midpointDifference > -0.05) {
+          if (midpointDifference < 0.05) {
+            console.log('#$# WOAHHHHH!!! ', midpointDifference);
+
+            if (higherStrikeBid < 0.05 || lowerStrikeBid < 0.05) {
+              console.log('#$# Ahhhh, false alarm...')
+            }
+            else {
+
+              const gudOne = {
+                symbol,
+                spreadType: 'CALLS',
+                totalPremiumSum: higherStrikeMidpoint + lowerStrikeMidpoint,
+                higherStrike,
+                lowerStrike,
+                underlyingPrice: underlyingData.last,
+                higherStrikeMidpoint,
+                lowerStrikeMidpoint,
+                expirationCycle: expirationString,
+                midpointDifference,
+              }
+
+              console.log('#$# Gucci? ', gudOne)
+
+              gudOnes.push(gudOne)
+            }
+          }
+
+        }
+        else {
+          console.log('#$# on last strike (no next higher one): ', strikes[i]);
+        }
+
+      }
+
+    })
+
+    const gudOnesSorted = gudOnes.sort((a, b) => a.totalPremiumSum > b.totalPremiumSum ? -1 : 1)
+
+    console.log(gudOnesSorted.length)
+    console.log('done calculating spreads!')
+
+    // return gudOnesSorted.slice(0, 25);
+    return gudOnesSorted;
+
+  }
+
+
+  getPennyPutSpreads(symbol: any, putExpDateMap: any, underlyingData: any) {
+
+    console.log('getting penny put spreads for: ', symbol, putExpDateMap);
+
+    const gudOnes = [];
+
+    // loop through expiration tables
+    Object.entries(putExpDateMap).forEach(([expirationString, puts]) => {
+
+      console.log('now looking at: ' + symbol + 'expirationString: ', expirationString);
+
+      // loop through strikes for a given expiration
+      const strikes = Object.keys(puts)
+
+      for (var i = 0; i < strikes.length; i++) {
+
+        const strike = strikes[i];
+
+        // console.log(ticker + ' strike: ', strike);
+        // console.log(ticker + ' put: ', puts[strike]);
+
+        if (strikes[i + 1]) {
+
+          const lowerStrike = puts[strikes[i]][0].strikePrice;
+          const higherStrike = puts[strikes[i + 1]][0].strikePrice;
+
+          console.log('#$# comparing strike ' + lowerStrike + ' to next higher: ' + higherStrike)
+
+          const lowerStrikeBid = puts[strikes[i]][0].bid
+          const lowerStrikeAsk = puts[strikes[i]][0].ask;
+          const lowerStrikeMidpoint = (lowerStrikeAsk + lowerStrikeBid) / 2;
+
+          console.log('#$# (strike ' + puts[strikes[i]][0].strikePrice + '), bid: ' + lowerStrikeBid + ', ask: ' + lowerStrikeAsk, ', mid: ', lowerStrikeMidpoint)
+
+          const higherStrikeBid = puts[strikes[i + 1]][0].bid
+          const higherStrikeAsk = puts[strikes[i + 1]][0].ask;
+          const higherStrikeMidpoint = (higherStrikeAsk + higherStrikeBid) / 2;
+
+          console.log('#$# (strike ' + puts[strikes[i + 1]][0].strikePrice + '), bid: ' + higherStrikeBid + ', ask: ' + higherStrikeAsk, ', mid: ', higherStrikeMidpoint)
+
+          const midpointDifference = higherStrikeMidpoint - lowerStrikeMidpoint;
+
+          console.log('#$# debit difference: ', midpointDifference);
+
+          // if (midpointDifference < 0.05 && midpointDifference > -0.05) {
+          if (midpointDifference < 0.05) {
+            console.log('#$# WOAHHHHH!!! ', midpointDifference);
+
+            if (higherStrikeBid < 0.05 || lowerStrikeBid < 0.05) {
+              console.log('#$# Ahhhh, false alarm...')
+            }
+            else {
+
+              const gudOne = {
+                symbol,
+                spreadType: 'PUTS',
+                totalPremiumSum: higherStrikeMidpoint + lowerStrikeMidpoint,
+                higherStrike,
+                lowerStrike,
+                underlyingPrice: underlyingData.last,
+                higherStrikeMidpoint,
+                lowerStrikeMidpoint,
+                expirationCycle: expirationString,
+                midpointDifference,
+              }
+
+              console.log('#$# Gucci? ', gudOne)
+
+              gudOnes.push(gudOne)
+            }
+          }
+
+        }
+        else {
+          console.log('#$# on last strike (no next higher one): ', strikes[i]);
+        }
+
+      }
+
+    })
+
+    const gudOnesSorted = gudOnes.sort((a, b) => a.totalPremiumSum > b.totalPremiumSum ? -1 : 1)
+
+    console.log(gudOnesSorted.length)
+    console.log('done calculating spreads!')
+
+    // return gudOnesSorted.slice(0, 25);
+    return gudOnesSorted;
+
+  }
+
   constructor() { }
 
   analyzePutSpreads(ticker: string, putExpirationMap: any, underlyingData: any) {
@@ -111,11 +294,12 @@ export class StrangulatorService {
                 console.log('time exp: ', puts[strike][0].expirationDate);
                 console.log('time 2: ', fortnightAway);
                 console.log('time: ', expirationDate);
-                
+
                 if (expirationDate > fortnightAway) {
 
                   gudOnes.push({
                     ticker,
+                    spreadType: 'CALLS',
                     underlyingPrice: underlyingData.last,
                     higherStrike,
                     lowerStrike,
