@@ -156,7 +156,7 @@ export class TradeBotPageComponent {
 
       console.log('#$# sorted ', this.analyzedDebitSpreads)
 
-      console.log('#$# pushed ',  this.analyzedDebitSpreads)
+      console.log('#$# pushed ', this.analyzedDebitSpreads)
     }, 20_000)
 
     this.allSymbols = [
@@ -172,6 +172,8 @@ export class TradeBotPageComponent {
       this.memeStonkTickers.length,
       this.solidProfitMakersTickers.length
     );
+
+    await this.tdApiSvc.init();
 
     this.arrayOfRowIndicies = Array.from(Array(this.rowsInTickerTable).keys())
 
@@ -230,7 +232,7 @@ export class TradeBotPageComponent {
           this.analyzedDebitSpreads.push(...putSpreads)
 
           // this.analyzedSpreads.push(spreadsForTicker);
-         
+
 
           // this.strangulations = this.strangulations.filter(strangulation => {
           //   return strangulation.length > 0
@@ -242,17 +244,8 @@ export class TradeBotPageComponent {
 
           // console.log('the gud ones are..... ', this.strangulations);
 
-
-
         }
-
       })
-
-
-
-
-
-
     }
   }
 }
