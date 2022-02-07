@@ -8,18 +8,16 @@
     <br />
 
     <h4>
-      Screened Tickers...
+      Screened Tickers
     </h4>
 
     <table class="table table-bordered border-primary" bordered="true">
 
       <thead class="thead-dark">
         <tr>
-          <th scope="col" class="text-center text-wrap">Large Caps</th>
-          <th scope="col" class="text-center text-wrap">ETFs</th>
-          <th scope="col" class="text-center text-wrap">High V's</th>
-          <th scope="col" class="text-center text-wrap">Meme Stonks</th>
-          <th scope="col" class="text-center text-wrap">Best In Class</th>
+          <th scope="col" class="text-center text-wrap flex-grow-1 ">Large Caps</th>
+          <th scope="col" class="text-center text-wrap flex-grow-1 ">Growth Stocks</th>
+          <th scope="col" class="text-center text-wrap flex-grow-1 ">ETFs</th>
         </tr>
       </thead>
       <tbody class="text-center">
@@ -27,20 +25,16 @@
           <ng-container *ngFor="let rowIndex of arrayOfRowIndicies">
             <tr scope="row">
 
-              <ng-container *ngIf="largecapTickers.length > rowIndex">
+              <ng-container>
                 <td>{{largecapTickers[rowIndex]}}</td>
               </ng-container>
 
-              <ng-container *ngIf="etfTickers.length > rowIndex">
+              <ng-container>
+                <td>{{growthStockTickers[rowIndex]}}</td>
+              </ng-container>
+
+              <ng-container>
                 <td>{{etfTickers[rowIndex]}}</td>
-              </ng-container>
-
-              <ng-container *ngIf="memeStonkTickers.length > rowIndex">
-                <td>{{memeStonkTickers[rowIndex]}}</td>
-              </ng-container>
-
-              <ng-container *ngIf="bestInClassTickers.length > rowIndex">
-                <td>{{bestInClassTickers[rowIndex]}}</td>
               </ng-container>
 
             </tr>
@@ -63,7 +57,8 @@
           <th scope="col" class="text-center text-wrap">Spread Type</th>
           <th scope="col" class="text-center text-wrap">Total Prem</th>
           <th scope="col" class="text-center text-wrap">Net Debit</th>
-          <th scope="col" class="text-center text-wrap">Expiration Cycle</th>
+          <th scope="col" class="text-center text-wrap">Expiration Date</th>
+          <th scope="col" class="text-center text-wrap">DTE</th>
           <th scope="col" class="text-center text-wrap">Higher Strike</th>
           <th scope="col" class="text-center text-wrap">Lower Strike</th>
           <th scope="col" class="text-center text-wrap">Underlying Price</th>
@@ -79,10 +74,11 @@
             <td>{{analyzedDebitSpread.spreadType}}</td>
             <td>{{+analyzedDebitSpread.totalPremiumSum.toFixed(2)}}</td>
             <td>{{analyzedDebitSpread.midpointDifference.toFixed(3)}}</td>
-            <td>{{analyzedDebitSpread.expirationCycle}}</td>
+            <td>{{analyzedDebitSpread.expirationDate}}</td>
+            <td>{{analyzedDebitSpread.expirationDaysLeft}}</td>
             <td>{{+analyzedDebitSpread.higherStrike}}</td>
             <td>{{analyzedDebitSpread.lowerStrike}}</td>
-            <td>{{+analyzedDebitSpread.underlyingPrice}}</td>
+            <td>{{+analyzedDebitSpread.underlyingPrice.toFixed(0)}}</td>
             
           </tr>
         </ng-container>
