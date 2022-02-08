@@ -15,7 +15,8 @@ export class TradeBotPageComponent {
 
   accountsData: any;
 
-  largecapTickers = ['GOOG', 'GOOGL', 'TSM', 'TSLA', 'BABA', 'WMT', 'DIS', 'BAC', 'NVDA', 'AMZN', 'SEB', 'BKNG', 'MKL', 'CMG']
+  largecapTickers = ['GOOG', 'GOOGL', 'TSM', 'TSLA', 'BABA', 'WMT', 'DIS', 'BAC', 'NVDA', 'AMZN', 'SEB', 'CMG']
+  // largecapTickers = ['FB']
   // etfTickers = ['IWM', 'QQQ', 'EEM', 'EWZ', 'IWM', 'XLF', 'SQQQ', 'SLV', 'GDX', 'XLE', 'TQQQ', 'SOXL', 'SMH', 'SPY', 'SPX']
   etfTickers = ['SPX']
   growthStockTickers = ['HOG', 'PFE', 'PTON', 'TWLO', 'APPS', 'CRSR', 'CHGG', 'DDOG', 'NET', 'MGM', 'GLBE']
@@ -102,7 +103,14 @@ export class TradeBotPageComponent {
 
   private sortDebitSpreads() {
     this.analyzedDebitSpreads = this.analyzedDebitSpreads.sort((a, b) => {
-      return a.totalPremiumSum > b.totalPremiumSum ? -1 : 1
+      
+      if (+a.expirationDaysLeft === +b.expirationDaysLeft) {
+        return a.totalPremiumSum > b.totalPremiumSum ? -1 : 1
+      }
+      else {
+        return +a.expirationDaysLeft > +b.expirationDaysLeft ? -1 : 1
+      }
+      
     })
   }
 }

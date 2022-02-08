@@ -54,14 +54,15 @@
       <thead class="thead-dark">
         <tr>
           <th scope="col" class="text-center text-wrap">Ticker</th>
-          <th scope="col" class="text-center text-wrap">Spread Type</th>
-          <th scope="col" class="text-center text-wrap">Total Prem</th>
-          <th scope="col" class="text-center text-wrap">Net Debit</th>
           <th scope="col" class="text-center text-wrap">Expiration Date</th>
           <th scope="col" class="text-center text-wrap">DTE</th>
+          <th scope="col" class="text-center text-wrap">Total Prem</th>
+          <th scope="col" class="text-center text-wrap">Net Debit</th>
           <th scope="col" class="text-center text-wrap">Higher Strike</th>
           <th scope="col" class="text-center text-wrap">Lower Strike</th>
           <th scope="col" class="text-center text-wrap">Underlying Price</th>
+          <th scope="col" class="text-center text-wrap">Spread Type</th>
+          <th scope="col" class="text-center text-wrap">ITM</th>
         </tr>
       </thead>
 
@@ -69,16 +70,17 @@
 
         <ng-container *ngFor="let analyzedDebitSpread of analyzedDebitSpreads">
 
-          <tr scope="row">
+          <tr scope="row" [ngClass]="{'red-row' : analyzedDebitSpread.spreadType === 'PUTS', 'green-row': analyzedDebitSpread.spreadType === 'CALLS'}">
             <td>{{analyzedDebitSpread.symbol}}</td>
-            <td>{{analyzedDebitSpread.spreadType}}</td>
-            <td>{{+analyzedDebitSpread.totalPremiumSum.toFixed(2)}}</td>
-            <td>{{analyzedDebitSpread.midpointDifference.toFixed(3)}}</td>
             <td>{{analyzedDebitSpread.expirationDate}}</td>
             <td>{{analyzedDebitSpread.expirationDaysLeft}}</td>
+            <td>{{+analyzedDebitSpread.totalPremiumSum.toFixed(2)}}</td>
+            <td>{{analyzedDebitSpread.midpointDifference.toFixed(3)}}</td>
             <td>{{+analyzedDebitSpread.higherStrike}}</td>
             <td>{{analyzedDebitSpread.lowerStrike}}</td>
             <td>{{+analyzedDebitSpread.underlyingPrice.toFixed(0)}}</td>
+            <td>{{analyzedDebitSpread.spreadType}}</td>
+            <td>{{ ((analyzedDebitSpread.spreadType === 'CALLS' && +analyzedDebitSpread.underlyingPrice > +analyzedDebitSpread.higherStrike) || (analyzedDebitSpread.spreadType === 'PUTS' && +analyzedDebitSpread.underlyingPrice < +analyzedDebitSpread.lowerStrike)) ? 'x' : '' }}</td>
             
           </tr>
         </ng-container>
