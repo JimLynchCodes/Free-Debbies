@@ -878,10 +878,19 @@ export class TdApiService {
 
     orderLegCollection = [optionToBuy, optionToSell]
 
-    const requestBody = {
+    const requestBodyZeroLimit = {
       orderType: "NET_DEBIT",
       session: "NORMAL",
       price: "0.00",
+      duration: "DAY",
+      orderStrategyType: "SINGLE",
+      orderLegCollection
+    }
+
+    const requestBodyOneCentLimit = {
+      orderType: "NET_DEBIT",
+      session: "NORMAL",
+      price: "0.01",
       duration: "DAY",
       orderStrategyType: "SINGLE",
       orderLegCollection
@@ -897,8 +906,9 @@ export class TdApiService {
       if (this.accessToken) {
 
         try {
-          const placeOrderResult = await this.http.post(placeOrderEndpoint, requestBody, { headers: ordersHeaders }).toPromise();
-          console.log('free debbie sent! ', placeOrderResult)
+          const placeOrderZeroLimitResult = await this.http.post(placeOrderEndpoint, requestBodyZeroLimit, { headers: ordersHeaders }).toPromise();
+          const placeOrderOneCentResult = await this.http.post(placeOrderEndpoint, requestBodyOneCentLimit, { headers: ordersHeaders }).toPromise();
+          console.log('free debbie(s) sent! ', placeOrderZeroLimitResult, placeOrderOneCentResult)
 
           return true;
 

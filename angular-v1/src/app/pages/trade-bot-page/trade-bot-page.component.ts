@@ -15,11 +15,19 @@ export class TradeBotPageComponent {
 
   accountsData: any;
 
-  largecapTickers = ['GOOG', 'GOOGL', 'AAPL', 'MSFT', 'TSM', 'TSLA', 'BABA', 'WMT', 'DIS', 'BAC', 'NVDA', 'AMZN', 'SEB', 'CMG', 'AMD', 'FB', 'AMZN', 'TSLA', 'SOXL', ]
-  // largecapTickers = ['FB']
+  // largecapTickers = ['GOOG', 'GOOGL', 'AAPL', 'MSFT', 'TSM', 'TSLA', 'BABA', 'WMT', 'DIS', 'BAC', 'NVDA', 'AMZN', 'SEB', 'CMG', 'AMD', 'FB', 'AMZN', 'TSLA', 'SOXL', ]
+  
+  // wall street jesus scans
+  // largecapTickers = []
+  largecapTickers = ['FB', 'GOOGL', 'TSLA']
   // etfTickers = ['IWM', 'QQQ', 'EEM', 'EWZ', 'IWM', 'XLF', 'SQQQ', 'SLV', 'GDX', 'XLE', 'TQQQ', 'SOXL', 'SMH', 'SPY', 'SPX']
   etfTickers = ['SPX'] 
-  growthStockTickers = ['HOG', 'PTON', 'TWLO', 'APPS', 'CRSR', 'CHGG', 'DDOG', 'NET', 'MGM', 'GLBE', 'AMGN', 'CHGG', 'SNAP', 'NIO', 'COIN', 'CVS', 'REGN', 'U', 'F', 'SPOT', 'ZNGA', 'BP', 'TTWO', 'JD', 'MA', 'UBER', 'DWAC', 'PTON', 'GME', 'SNAP', 'OIL', 'LYFT', 'PACE', 'PYPL', 'LINK', 'GLD', 'NET', 'SLV', 'DIS', 'SPOT', 'NFLX', 'SAND', 'LEN']
+  // growthStockTickers = ['HOG', 'PTON', 'TWLO', 'APPS', 'CRSR', 'CHGG', 'DDOG', 'NET', 'MGM', 'GLBE', 'AMGN', 'CHGG', 'SNAP', 'NIO', 'COIN', 'CVS', 'REGN', 'U', 'F', 'SPOT', 'ZNGA', 'BP', 'TTWO', 'JD', 'MA', 'UBER', 'DWAC', 'PTON', 'GME', 'SNAP', 'OIL', 'LYFT', 'PACE', 'PYPL', 'LINK', 'GLD', 'NET', 'SLV', 'DIS', 'SPOT', 'NFLX', 'SAND', 'LEN']
+  // growthStockTickers = ['SPY', 'SPX', 'APPS', 'TQQQ', 'SOXL', 'NIO', 'U', 'TSLA', 'RTX', 'CCJ', 'YETI', 'AMD', 'AMC', 'VFF', 'FRSH', 'MCRI', 'SQ', 'HBI']
+  
+  // long term shorts (furnaces)
+  growthStockTickers = ['HBI', 'VNCE', 'XELB', 'REED', 'WTER', 'BRFH', 'PBYI', 'MDWD', 'HIMS', 'SUMR', 'BGI', 'MYTE', 'NETI', 'NAT', 'INSW', 'PXS', 'TOPS', 'PSHG', 'AIT', 'SGBX', 'ALPP', 'CRS', 'MEDS', 'GNLN', 'RAD', 'IDW', 'GCI', 'DALN', 'MLCO', 'LVS', 'MSC', 'PLYS', 'CZR', 'HGV', 'VAC', 'SMIT', 'SLNH', 'WRAP', 'NXTD', 'ARLO', 'ADT', 'EMAN', 'CCMP', 'LEDS', 'FST', 'KORE', 'BMTX', 'TEAM', 'ASAN', 'RNG', 'PRO', 'MSTR', 'QUMU', 'SNCR', 'BKNG', 'COF', 'OXY', 'SKLZ', 'NOVA', 'BLNK', 'LMND', 'PLUG', 'TUP', 'K', 'KMX', 'AXP', 'LQD', 'BBWI' ]
+  // growthStockTickers = []
 
   rowsInTickerTable = 0
   arrayOfRowIndicies = []

@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 
-const MAXIMUM_DEBIT_PRICE = 0.05;
+const MAXIMUM_DEBIT_PRICE = 0.1;
 
-const MINIMUM_ACCEPTABLE_BID = 0.85;
+const MINIMUM_ACCEPTABLE_BID = 0.35;
 
 @Injectable({
   providedIn: 'root'
