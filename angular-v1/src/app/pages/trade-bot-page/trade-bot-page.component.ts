@@ -15,11 +15,11 @@ export class TradeBotPageComponent {
 
   accountsData: any;
 
-  largecapTickers = ['GOOG', 'GOOGL', 'TSM', 'TSLA', 'BABA', 'WMT', 'DIS', 'BAC', 'NVDA', 'AMZN', 'SEB', 'CMG']
+  largecapTickers = ['GOOG', 'GOOGL', 'AAPL', 'MSFT', 'TSM', 'TSLA', 'BABA', 'WMT', 'DIS', 'BAC', 'NVDA', 'AMZN', 'SEB', 'CMG', 'AMD']
   // largecapTickers = ['FB']
   // etfTickers = ['IWM', 'QQQ', 'EEM', 'EWZ', 'IWM', 'XLF', 'SQQQ', 'SLV', 'GDX', 'XLE', 'TQQQ', 'SOXL', 'SMH', 'SPY', 'SPX']
-  etfTickers = ['SPX']
-  growthStockTickers = ['HOG', 'PFE', 'PTON', 'TWLO', 'APPS', 'CRSR', 'CHGG', 'DDOG', 'NET', 'MGM', 'GLBE']
+  etfTickers = ['SPX'] 
+  growthStockTickers = ['HOG', 'PFE', 'PTON', 'TWLO', 'APPS', 'CRSR', 'CHGG', 'DDOG', 'NET', 'MGM', 'GLBE', 'AMGN', 'CHGG', 'SNAP', 'NIO', 'COIN', 'CVS', 'REGN', 'U', 'F', 'SPOT', 'ZNGA', 'BP', 'TTWO', 'JD', 'MA', 'UBER']
 
   rowsInTickerTable = 0
   arrayOfRowIndicies = []
