@@ -63,6 +63,7 @@
           <th scope="col" class="text-center text-wrap">Underlying Price</th>
           <th scope="col" class="text-center text-wrap">Spread Type</th>
           <th scope="col" class="text-center text-wrap">ITM</th>
+          <th scope="col" class="text-center text-wrap">Place<br/>Order</th>
         </tr>
       </thead>
 
@@ -81,7 +82,11 @@
             <td>{{+analyzedDebitSpread.underlyingPrice.toFixed(0)}}</td>
             <td>{{analyzedDebitSpread.spreadType}}</td>
             <td>{{ ((analyzedDebitSpread.spreadType === 'CALLS' && +analyzedDebitSpread.underlyingPrice > +analyzedDebitSpread.higherStrike) || (analyzedDebitSpread.spreadType === 'PUTS' && +analyzedDebitSpread.underlyingPrice < +analyzedDebitSpread.lowerStrike)) ? 'x' : '' }}</td>
-            
+            <td>
+              <button (click)="placeFreeDebbieOrder(analyzedDebitSpread)">
+                🚀&nbsp;
+              </button>
+            </td>
           </tr>
         </ng-container>
       </tbody>

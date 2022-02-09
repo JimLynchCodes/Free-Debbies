@@ -798,4 +798,122 @@ export class TdApiService {
 
   }
 
+  async placeFreeDebbieOrder(ticker: string, spreadType: 'CALLS' | 'PUTS', higherStrike: number, lowerStrike: number, expirationCycle: string, account: string) {
+
+    console.log('Placing debbie: ', ticker, spreadType, higherStrike, lowerStrike, expirationCycle, account)
+
+    const placeOrderEndpoint = `https://api.tdameritrade.com/v1/accounts/${account}/orders`
+
+    let orderLegCollection;
+    let optionToBuy;
+    let optionToSell;
+
+    const dateFirstDashIndex =  expirationCycle.indexOf('-');
+
+    const dateSecondDashIndex =  expirationCycle.indexOf('-', dateFirstDashIndex+1);
+
+    const expirationYear = expirationCycle.substr(0,dateFirstDashIndex);
+    const expirationYearTwoDigits = expirationYear.substr(2);
+    const expirationMonth = expirationCycle.substring(dateFirstDashIndex + 1, dateSecondDashIndex); 
+    const expirationDay = expirationCycle.substr(dateSecondDashIndex + 1);
+
+    console.log({ expirationYear })
+    console.log({ expirationYearTwoDigits })
+    console.log({ expirationMonth })
+    console.log({ expirationDay })
+
+    const expirationDateOrderStyle = expirationMonth + expirationDay + expirationYearTwoDigits
+
+    if (spreadType === 'CALLS') {
+
+      const optionToBuySymbol = ticker + '_' + expirationDateOrderStyle + 'C' + lowerStrike;
+
+      optionToBuy = {
+        instruction: "BUY_TO_OPEN",
+        quantity: 1,
+        instrument: {
+          symbol: optionToBuySymbol,
+          assetType: "OPTION"
+        }
+      }
+
+      const optionToSellSymbol = ticker + '_' + expirationDateOrderStyle + 'C' + higherStrike;
+
+      optionToSell = {
+        instruction: "SELL_TO_OPEN",
+        quantity: 1,
+        instrument: {
+          symbol: optionToSellSymbol,
+          assetType: "OPTION"
+        }
+      }
+
+    }
+
+    if (spreadType === 'PUTS') {
+
+      const optionToBuySymbol = ticker + '_' + expirationDateOrderStyle + 'P' + higherStrike;
+
+      optionToBuy = {
+        instruction: "BUY_TO_OPEN",
+        quantity: 1,
+        instrument: {
+          symbol: optionToBuySymbol,
+          assetType: "OPTION"
+        }
+      }
+
+      const optionToSellSymbol = ticker + '_' + expirationDateOrderStyle + 'P' + lowerStrike;
+
+      optionToSell = {
+        instruction: "SELL_TO_OPEN",
+        quantity: 1,
+        instrument: {
+          symbol: optionToSellSymbol,
+          assetType: "OPTION"
+        }
+      }
+
+    }
+
+    orderLegCollection = [optionToBuy, optionToSell]
+
+    const requestBody = {
+      orderType: "NET_DEBIT",
+      session: "NORMAL",
+      price: "0.00",
+      duration: "DAY",
+      orderStrategyType: "SINGLE",
+      orderLegCollection
+    }
+
+    const ordersHeaders = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${this.accessToken}`
+    })
+
+    if (!this.currentlyCallingForNewAccessToken) {
+
+      if (this.accessToken) {
+
+        try {
+          const placeOrderResult = await this.http.post(placeOrderEndpoint, requestBody, { headers: ordersHeaders }).toPromise();
+          console.log('free debbie sent! ', placeOrderResult)
+
+          return true;
+
+        }
+        catch (err) {
+          console.log('err placing order! ', err)
+
+        }
+      } else {
+        console.log('Error, trying to call with no access token!')
+      }
+    } else {
+      console.log('Currently calling for access token!')
+    }
+
+  }
+
 }

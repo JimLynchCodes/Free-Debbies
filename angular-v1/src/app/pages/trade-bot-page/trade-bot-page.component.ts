@@ -15,11 +15,11 @@ export class TradeBotPageComponent {
 
   accountsData: any;
 
-  largecapTickers = ['GOOG', 'GOOGL', 'AAPL', 'MSFT', 'TSM', 'TSLA', 'BABA', 'WMT', 'DIS', 'BAC', 'NVDA', 'AMZN', 'SEB', 'CMG', 'AMD']
+  largecapTickers = ['GOOG', 'GOOGL', 'AAPL', 'MSFT', 'TSM', 'TSLA', 'BABA', 'WMT', 'DIS', 'BAC', 'NVDA', 'AMZN', 'SEB', 'CMG', 'AMD', 'FB', 'AMZN', 'TSLA', 'SOXL', ]
   // largecapTickers = ['FB']
   // etfTickers = ['IWM', 'QQQ', 'EEM', 'EWZ', 'IWM', 'XLF', 'SQQQ', 'SLV', 'GDX', 'XLE', 'TQQQ', 'SOXL', 'SMH', 'SPY', 'SPX']
   etfTickers = ['SPX'] 
-  growthStockTickers = ['HOG', 'PFE', 'PTON', 'TWLO', 'APPS', 'CRSR', 'CHGG', 'DDOG', 'NET', 'MGM', 'GLBE', 'AMGN', 'CHGG', 'SNAP', 'NIO', 'COIN', 'CVS', 'REGN', 'U', 'F', 'SPOT', 'ZNGA', 'BP', 'TTWO', 'JD', 'MA', 'UBER']
+  growthStockTickers = ['HOG', 'PTON', 'TWLO', 'APPS', 'CRSR', 'CHGG', 'DDOG', 'NET', 'MGM', 'GLBE', 'AMGN', 'CHGG', 'SNAP', 'NIO', 'COIN', 'CVS', 'REGN', 'U', 'F', 'SPOT', 'ZNGA', 'BP', 'TTWO', 'JD', 'MA', 'UBER', 'DWAC', 'PTON', 'GME', 'SNAP', 'OIL', 'LYFT', 'PACE', 'PYPL', 'LINK', 'GLD', 'NET', 'SLV', 'DIS', 'SPOT', 'NFLX', 'SAND', 'LEN']
 
   rowsInTickerTable = 0
   arrayOfRowIndicies = []
@@ -71,6 +71,17 @@ export class TradeBotPageComponent {
 
   }
 
+  async placeFreeDebbieOrder(debbieData) {
+
+    console.log('debbie data: ', debbieData)
+
+    const fakeAccount = '756614296'
+
+    await this.tdApiSvc.placeFreeDebbieOrder(debbieData.symbol, debbieData.spreadType, debbieData.higherStrike, debbieData.lowerStrike, debbieData.expirationDate, fakeAccount);
+
+    console.log('done debbie!')
+  }
+
   private async recalcSpreads() {
     this.analyzedDebitSpreads = []
 
@@ -105,7 +116,7 @@ export class TradeBotPageComponent {
     this.analyzedDebitSpreads = this.analyzedDebitSpreads.sort((a, b) => {
       
       if (+a.expirationDaysLeft === +b.expirationDaysLeft) {
-        return a.totalPremiumSum > b.totalPremiumSum ? -1 : 1
+        return a.midpointDifference < b.midpointDifference ? -1 : 1
       }
       else {
         return +a.expirationDaysLeft > +b.expirationDaysLeft ? -1 : 1
